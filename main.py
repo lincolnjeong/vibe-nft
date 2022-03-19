@@ -68,7 +68,7 @@ def read_root():
 
 @app.post("/vibe/", status_code=200)
 def post_root(request: Request, x_line_signature: str = Header(None)):
-    logger.error(str(requests))
+    logger.error(str(request))
     payload = json.loads(request.body())
     events = payload['events']
     for event in events:
