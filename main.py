@@ -16,6 +16,7 @@ def read_root():
 @app.post("/vibe/", status_code=200)
 def post_root(payload: Optional[str] = None):
     try:
+        print(payload)
         payload = json.loads(payload)
         events = payload['events']
         for event in events:
