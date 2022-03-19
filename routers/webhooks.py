@@ -8,8 +8,8 @@ from linebot.models import TextMessage, MessageEvent, TextSendMessage, StickerMe
     StickerSendMessage
 from pydantic import BaseModel
 
-line_bot_api = LineBotApi(os.environ('CHANNEL_ACCESS_TOKEN'))
-handler = WebhookHandler(os.environ('CHANNEL_SECRET'))
+line_bot_api = LineBotApi(os.environ['CHANNEL_ACCESS_TOKEN'])
+handler = WebhookHandler(os.environ['CHANNEL_SECRET'])
 
 router = APIRouter(
     prefix="/webhooks",
