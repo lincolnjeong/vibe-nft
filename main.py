@@ -1,13 +1,14 @@
 from typing import Optional
 
 from fastapi import FastAPI
+from os import environ
 
 app = FastAPI()
 
 
 @app.get("/")
 def read_root():
-    return {"Hello": "World"}
+    return {"Hello": "World", "master": environ['MASTER_NAME']}
 
 
 @app.post("/", status_code=200)
