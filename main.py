@@ -15,7 +15,7 @@ def read_root():
 
 
 @app.post("/vibe/", status_code=200)
-def post_root(payload: Optional[str] = None):
+def post_root(payload):
     print(payload)
     sys.stdout.flush()
     payload = json.loads(payload)
