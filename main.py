@@ -74,6 +74,7 @@ def read_root():
 def post_root(item: Line):
     events = item.events
     for event in events:
+        event = json.loads(event)
         if event['type'] is not 'message':
             continue
         reply_token = event['replyToken']
