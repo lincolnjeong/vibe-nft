@@ -13,7 +13,7 @@ def read_root():
     return {"Hello": "World", "master": environ['MASTER_NAME']}
 
 
-@app.post("/vibe", status_code=200)
+@app.post("/vibe/", status_code=200)
 def post_root(payload):
     payload = json.loads(payload)
     events = payload['events']
