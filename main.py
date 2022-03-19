@@ -4,9 +4,10 @@ from fastapi import FastAPI
 from os import environ
 import json
 import requests
-import sys
+import logging
 
 app = FastAPI()
+logger = logging.getLogger("app")
 
 
 @app.get("/")
@@ -16,9 +17,7 @@ def read_root():
 
 @app.post("/vibe/", status_code=200)
 def post_root(payload):
-    print(payload)
-    sys.stdout.flush()
-    payload = json.loads(payload)
+    logger.debug(payload)
     events = payload['events']
     for event in events:
         if event['type'] is not 'message':
