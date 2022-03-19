@@ -4,6 +4,7 @@ from fastapi import FastAPI
 from os import environ
 import json
 import requests
+import sys
 
 app = FastAPI()
 
@@ -17,6 +18,7 @@ def read_root():
 def post_root(payload: Optional[str] = None):
     try:
         print(payload)
+        sys.stdout.flush()
         payload = json.loads(payload)
         events = payload['events']
         for event in events:
