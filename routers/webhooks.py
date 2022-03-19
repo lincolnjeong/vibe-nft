@@ -38,7 +38,7 @@ def message_text(event):
     print("!!!!!!!!!!!!!!!!!!!!!!")
     print(event)
     print("!!!!!!!!!!!!!!!!!!!!!!")
-    message = "msg: {}\nuser_id: {}".format(event.message.text, event.source.userId)
+    message = f"msg: {event.message.text}\nuser_id: {event.source.user_id}"
     line_bot_api.reply_message(
         event.reply_token,
         TextSendMessage(text=message)
