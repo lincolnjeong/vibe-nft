@@ -1,20 +1,20 @@
-import hmac
-import hashlib
 import base64
-import logging
-import sys
+import hashlib
+import hmac
+
 from request_flattener import RequestBodyFlattener
 
-class SignatureGenerator:
 
+class SignatureGenerator:
     def __createSignTarget(self, method, path, timestamp, nonce, parameters: dict = {}):
         signTarget = f'{nonce}{str(timestamp)}{method}{path}'
-        if(len(parameters) > 0):
+        if (len(parameters) > 0):
             signTarget = signTarget + "?"
 
         return signTarget
 
-    def generate(self, secret: str, method: str, path: str, timestamp: int, nonce: str, query_params: dict = {}, body: dict = {}):
+    def generate(self, secret: str, method: str, path: str, timestamp: int, nonce: str, query_params: dict = {},
+                 body: dict = {}):
         body_flattener = RequestBodyFlattener()
         all_parameters = {}
         all_parameters.update(query_params)
