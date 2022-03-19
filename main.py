@@ -4,6 +4,7 @@ import os
 from os import environ
 from typing import List, Optional
 import requests
+import json
 
 from fastapi import FastAPI, APIRouter, HTTPException, Header, Request
 from linebot import LineBotApi, WebhookHandler
@@ -67,8 +68,8 @@ def read_root():
 
 @app.post("/vibe/", status_code=200)
 def post_root(request: Request, x_line_signature: str = Header(None)):
-    payload = request.body()
-    logger.debug(str(payload))
+    logger.error(str(requests))
+    payload = json.loads(request.body())
     events = payload['events']
     for event in events:
         if event['type'] is not 'message':
