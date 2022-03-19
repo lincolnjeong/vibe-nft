@@ -16,6 +16,7 @@ from pydantic import BaseModel
 app = FastAPI()
 logger = logging.getLogger("app")
 
+
 #
 # line_bot_api = LineBotApi(os.getenv('LINE_CHANNEL_ACCESS_TOKEN'))
 # handler = WebhookHandler(os.getenv('LINE_CHANNEL_SECRET'))
@@ -59,16 +60,18 @@ logger = logging.getLogger("app")
 #     )
 #
 
-class Item(BaseModel):
-    pass
-    
+class Line(BaseModel):
+    destination: str
+    events: List[Optional[None]]
+
+
 @app.get("/")
 def read_root():
     return {"Hello": "World", "master": environ['MASTER_NAME']}
 
 
 @app.post("/vibe/", status_code=200)
-def post_root(item: Item):
+def post_root(item: Line):
     events = item.events
     for event in events:
         if event['type'] is not 'message':
