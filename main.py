@@ -68,7 +68,7 @@ def read_root():
 @app.post("/vibe/", status_code=200)
 def post_root(request: Request, x_line_signature: str = Header(None)):
     payload = request.body()
-    logger.debug(payload)
+    logger.debug(str(payload))
     events = payload['events']
     for event in events:
         if event['type'] is not 'message':
