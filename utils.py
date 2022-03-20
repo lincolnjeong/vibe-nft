@@ -31,10 +31,10 @@ def get_track_meta(query):
             'album_image': album_image}
 
 
-def message_analyzer(text):
-    if text[:6] != '/mint ':
-        return 0, text
-    text = text.replace('/mint ', '')
+def message_analyzer(original):
+    if original[:6] != '/mint ':
+        return 0, original
+    text = original.replace('/mint ', '')
     text = text.split(',')
     result = []
     for query in text:
@@ -44,7 +44,7 @@ def message_analyzer(text):
         except:
             pass
     if len(result) == 0:
-        return 400, text
+        return 400, original
     return 200, result
 
 
