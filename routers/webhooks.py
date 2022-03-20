@@ -5,8 +5,11 @@ from fastapi import APIRouter, HTTPException, Header, Request
 from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
 from linebot.models import TextMessage, MessageEvent, TextSendMessage, StickerMessage, \
-  StickerSendMessage, FlexSendMessage
+    StickerSendMessage, FlexSendMessage
 from pydantic import BaseModel
+
+from message.templates import message_contents
+from utils import get_track_meta, message_analyzer, make_msg
 
 line_bot_api = LineBotApi(os.environ['CHANNEL_ACCESS_TOKEN'])
 handler = WebhookHandler(os.environ['CHANNEL_SECRET'])
@@ -23,6 +26,16 @@ class Line(BaseModel):
     events: List[Optional[None]]
 
 
+def get_user_info(user_id):
+    user_info = {}
+    profile = line_bot_api.get_profile(user_id)
+    user_info['display_name'] = profile.display_name
+    user_info['user_id'] = profile.user_id
+    user_info['picture_url'] = profile.picture_url
+    user_info['status_message'] = profile.status_message
+    return user_info
+
+
 @router.post("/line/vibe")
 async def callback(request: Request, x_line_signature: str = Header(None)):
     body = await request.body()
@@ -33,198 +46,28 @@ async def callback(request: Request, x_line_signature: str = Header(None)):
     return 'OK'
 
 
-template = {
-  "type": "bubble",
-  "body": {
-    "type": "box",
-    "layout": "vertical",
-    "contents": [
-      {
-        "type": "box",
-        "layout": "horizontal",
-        "contents": [
-          {
-            "type": "image",
-            "url": "https://musicmeta-phinf.pstatic.net/album/005/141/5141786.jpg?type=r480Fll&v=202203201451",
-            "size": "5xl",
-            "aspectMode": "cover",
-            "aspectRatio": "150:196",
-            "gravity": "center",
-            "flex": 1
-          },
-          {
-            "type": "box",
-            "layout": "vertical",
-            "contents": [
-              {
-                "type": "image",
-                "url": "https://musicmeta-phinf.pstatic.net/album/000/194/194629.jpg?type=r480Fll&v=202203201451",
-                "size": "full",
-                "aspectMode": "cover",
-                "aspectRatio": "150:98",
-                "gravity": "center"
-              },
-              {
-                "type": "image",
-                "url": "https://musicmeta-phinf.pstatic.net/album/005/242/5242739.jpg?type=r480Fll&v=202203201451",
-                "size": "full",
-                "aspectMode": "cover",
-                "aspectRatio": "150:98",
-                "gravity": "center"
-              }
-            ],
-            "flex": 1
-          }
-        ]
-      },
-      {
-        "type": "box",
-        "layout": "horizontal",
-        "contents": [
-          {
-            "type": "box",
-            "layout": "vertical",
-            "contents": [
-              {
-                "type": "text",
-                "contents": [
-                  {
-                    "type": "span",
-                    "text": "Tracks",
-                    "weight": "bold",
-                    "color": "#000000"
-                  },
-                  {
-                    "type": "span",
-                    "text": "    | "
-                  },
-                  {
-                    "type": "span",
-                    "text": "봄비 - 라일락, 봄봄 - 아이유, 허슬허슬허슬허슬허슬 - 도끼"
-                  }
-                ],
-                "size": "sm",
-                "wrap": True
-              },
-              {
-                "type": "text",
-                "contents": [
-                  {
-                    "type": "span",
-                    "text": "Tracks",
-                    "weight": "bold",
-                    "color": "#000000"
-                  },
-                  {
-                    "type": "span",
-                    "text": "    | "
-                  },
-                  {
-                    "type": "span",
-                    "text": "봄비 - 라일락, 봄봄 - 아이유, 허슬허슬허슬허슬허슬 - 도끼"
-                  }
-                ],
-                "size": "sm",
-                "wrap": True
-              },
-              {
-                "type": "box",
-                "layout": "baseline",
-                "contents": [
-                  {
-                    "type": "text",
-                    "text": "Maker | U2oeoASefqwefQWEFqwef",
-                    "size": "sm",
-                    "color": "#bcbcbc",
-                    "contents": [
-                      {
-                        "type": "span",
-                        "text": "Maker ID"
-                      },
-                      {
-                        "type": "span",
-                        "text": " | "
-                      },
-                      {
-                        "type": "span",
-                        "text": "U1iriowef92"
-                      }
-                    ]
-                  }
-                ],
-                "spacing": "sm",
-                "margin": "md"
-              },
-              {
-                "type": "box",
-                "layout": "baseline",
-                "contents": [
-                  {
-                    "type": "text",
-                    "text": "Maker | U2oeoASefqwefQWEFqwef",
-                    "size": "sm",
-                    "color": "#bcbcbc",
-                    "contents": [
-                      {
-                        "type": "span",
-                        "text": "Tx"
-                      },
-                      {
-                        "type": "span",
-                        "text": " | "
-                      },
-                      {
-                        "type": "span",
-                        "text": "Txdddd"
-                      }
-                    ]
-                  }
-                ],
-                "margin": "none",
-                "spacing": "none"
-              }
-            ]
-          }
-        ],
-        "spacing": "xl",
-        "paddingAll": "20px"
-      }
-    ],
-    "paddingAll": "0px"
-  },
-  "footer": {
-    "type": "box",
-    "layout": "vertical",
-    "contents": [
-      {
-        "type": "button",
-        "action": {
-          "type": "uri",
-          "label": "토큰 확인",
-          "uri": "http://linecorp.com/"
-        }
-      }
-    ]
-  }
-}
-
-flex_message = FlexSendMessage(
-  alt_text='hello',
-  contents=template
-)
-
 @handler.add(MessageEvent, message=TextMessage)
 def message_text(event):
     print("!!!!!!!!!!!!!!!!!!!!!!")
     print(event)
     print("!!!!!!!!!!!!!!!!!!!!!!")
-    message = f"msg: {event.message.text}\nuser_id: {event.source.user_id}"
-    line_bot_api.reply_message(
-        event.reply_token,
-        # TextSendMessage(text=message)
-        flex_message
-    )
+    user_info = get_user_info(event.source.user_id)
+    status, msg = message_analyzer(event.message.text)
+    tx_id = '4D696C7B28918870EB6025F30E6B5A4577417E5613E6FAF230DB3EDA8C83CD5E'
 
+    if status == 400:
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text=f'"{msg}" 에서 곡을 찾지 못했습니다. \n,(comma)를 사용하여 검색어를 입력해 주세요.')
+        )
+    elif status == 200:
+        line_bot_api.reply_message(
+            event.reply_token,
+            FlexSendMessage(
+                alt_text='nft message',
+                contents=message_contents(make_msg(msg, user_info, tx_id))
+            )
+        )
 
 
 @handler.add(MessageEvent, message=StickerMessage)

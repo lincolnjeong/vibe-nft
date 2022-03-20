@@ -27,7 +27,31 @@ def get_track_meta(query):
     artist_name = ", ".join([i['artistName'] for i in meta['artists']])
     album_title = meta['album']['albumTitle']
     album_image = meta['album']['imageUrl']
-    return {'track_id': track_id, 'track_title': track_title, 'artist_name': artist_name, 'album_title': album_title, 'album_image': album_image}
+    return {'track_id': track_id, 'track_title': track_title, 'artist_name': artist_name, 'album_title': album_title,
+            'album_image': album_image}
+
+
+def message_analyzer(text):
+    if text[:6] != '/mint ':
+        return 0, text
+    text = text.replace('/mint ', '')
+    text = text.split(',')
+    result = []
+    for query in text:
+        try:
+            meta = get_track_meta(query)
+            result.append(meta)
+        except:
+            pass
+    if len(result) == 0:
+        return 400, text
+    return 200, result
+
+
+def make_msg(track_info, user_info, tx_id):
+    return {'image': [i['album_image'] for i in track_info],
+            'track_info': [" - ".join([i['track_title'], i['artist_name']]) for i in track_info],
+            'user_info': '{}({})'.format(user_info['user_id'], user_info['display_name']), 'tx_id': tx_id}
 
 
 class BlackChainUtils:
@@ -45,8 +69,13 @@ class BlackChainUtils:
             'nonce': nonce,
             'timestamp': str(timestamp),
             'signature': self.get_signature(method=method, path=path, nonce=nonce, timestamp=timestamp,
-                                            secret=self.config['service_api_secret'], body=body) if body is not None else self.get_signature(method=method, path=path, nonce=nonce, timestamp=timestamp,
-                                            secret=self.config['service_api_secret'])
+                                            secret=self.config['service_api_secret'],
+                                            body=body) if body is not None else self.get_signature(method=method,
+                                                                                                   path=path,
+                                                                                                   nonce=nonce,
+                                                                                                   timestamp=timestamp,
+                                                                                                   secret=self.config[
+                                                                                                       'service_api_secret'])
         }
         return headers
 
