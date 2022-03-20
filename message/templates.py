@@ -311,7 +311,7 @@ def message_contents(msg):
                   }
                 ],
                 "size": "sm",
-                "wrap": true
+                "wrap": True
               },
               {
                 "type": "box",
