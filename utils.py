@@ -49,10 +49,10 @@ def message_analyzer(original):
     return 200, result
 
 
-def make_msg(track_info, user_info, tx_id):
+def make_msg(track_info, user_info):
     return {'image': [i['album_image'] for i in track_info],
             'track_info': ", ".join([" - ".join([i['track_title'], i['artist_name']]) for i in track_info]),
-            'user_id': user_info['user_id'], 'user_name': user_info['display_name'], 'tx_id': tx_id, 'track_ids': str([int(i['track_id']) for i in track_info])[1:-1].replace(' ', '')}
+            'user_id': user_info['user_id'], 'user_name': user_info['display_name'], 'track_ids': str([int(i['track_id']) for i in track_info])[1:-1].replace(' ', '')}
 
 
 def load_config():
