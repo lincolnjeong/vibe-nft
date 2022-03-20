@@ -50,7 +50,7 @@ def message_analyzer(original):
 
 def make_msg(track_info, user_info, tx_id):
     return {'image': [i['album_image'] for i in track_info],
-            'track_info': [" - ".join([i['track_title'], i['artist_name']]) for i in track_info],
+            'track_info': ", ".join([" - ".join([i['track_title'], i['artist_name']]) for i in track_info]),
             'user_info': '{}({})'.format(user_info['user_id'], user_info['display_name']), 'tx_id': tx_id}
 
 
