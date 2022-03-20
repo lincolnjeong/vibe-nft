@@ -64,7 +64,7 @@ def message_text(event):
             TextSendMessage(text=f'"{msg}" 에서 곡을 찾지 못했습니다. \n,(comma)를 사용하여 검색어를 입력해 주세요.')
         )
     elif status == 200:
-        nft_result = mint_nft(user_info['user_id'], msg, msg)
+        nft_result = mint_nft(user_info['user_id'], str(msg), str(msg))
         if (nft_result.status_code >= 200) & (nft_result.status_code <= 300):
             line_bot_api.reply_message(
                 event.reply_token,
