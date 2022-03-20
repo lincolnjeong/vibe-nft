@@ -3,7 +3,7 @@ import json
 
 def make_image(images):
     if len(images) == 1:
-        return json.dumps({
+        return json.loads('''{
             "type": "image",
             "url": images[0],
             "size": "5xl",
@@ -11,9 +11,9 @@ def make_image(images):
             "aspectRatio": "300:196",
             "gravity": "center",
             "flex": 1
-        })
+        }''')
     elif len(images) == 2:
-        return json.dumps({
+        return json.loads('''{
             {
                 "type": "image",
                 "url": images[0],
@@ -38,9 +38,9 @@ def make_image(images):
                 ],
                 "flex": 1
             }
-        })
+        }''')
     elif len(images) >= 3:
-        return json.dumps({
+        return json.loads('''{
             {
                 "type": "image",
                 "url": images[0],
@@ -73,7 +73,7 @@ def make_image(images):
                 ],
                 "flex": 1
             }
-        })
+        }''')
 
 
 def message_contents(msg):
