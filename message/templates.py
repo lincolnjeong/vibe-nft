@@ -5,7 +5,7 @@ def make_image(images):
     if len(images) == 1:
         return {
             "type": "image",
-            "url": str(images[0]),
+            "url": images[0],
             "size": "5xl",
             "aspectMode": "cover",
             "aspectRatio": "300:196",
@@ -16,7 +16,7 @@ def make_image(images):
         return [{
             {
                 "type": "image",
-                "url": str(images[0]),
+                "url": images[0],
                 "size": "5xl",
                 "aspectMode": "cover",
                 "aspectRatio": "150:196",
@@ -40,7 +40,7 @@ def make_image(images):
             }
         }]
     elif len(images) >= 3:
-        return json.dumps([{
+        return [{
             {
                 "type": "image",
                 "url": str(images[0]),
@@ -64,7 +64,7 @@ def make_image(images):
                     },
                     {
                         "type": "image",
-                        "url": str(images[2]),
+                        "url": images[2],
                         "size": "full",
                         "aspectMode": "cover",
                         "aspectRatio": "150:98",
@@ -73,7 +73,7 @@ def make_image(images):
                 ],
                 "flex": 1
             }
-        }])
+        }]
 
 
 def get_template():
@@ -234,40 +234,7 @@ def message_contents(msg):
       {
         "type": "box",
         "layout": "horizontal",
-        "contents": [
-          {
-            "type": "image",
-            "url": "https://scdn.line-apps.com/n/channel_devcenter/img/flexsnapshot/clip/clip7.jpg",
-            "size": "5xl",
-            "aspectMode": "cover",
-            "aspectRatio": "150:196",
-            "gravity": "center",
-            "flex": 1
-          },
-          {
-            "type": "box",
-            "layout": "vertical",
-            "contents": [
-              {
-                "type": "image",
-                "url": "https://scdn.line-apps.com/n/channel_devcenter/img/flexsnapshot/clip/clip8.jpg",
-                "size": "full",
-                "aspectMode": "cover",
-                "aspectRatio": "150:98",
-                "gravity": "center"
-              },
-              {
-                "type": "image",
-                "url": "https://scdn.line-apps.com/n/channel_devcenter/img/flexsnapshot/clip/clip9.jpg",
-                "size": "full",
-                "aspectMode": "cover",
-                "aspectRatio": "150:98",
-                "gravity": "center"
-              }
-            ],
-            "flex": 1
-          }
-        ]
+        "contents": make_image(images)
       },
       {
         "type": "box",
