@@ -104,7 +104,7 @@ template = {
                   }
                 ],
                 "size": "sm",
-                "wrap": true
+                "wrap": True
               },
               {
                 "type": "text",
@@ -125,7 +125,7 @@ template = {
                   }
                 ],
                 "size": "sm",
-                "wrap": true
+                "wrap": True
               },
               {
                 "type": "box",
