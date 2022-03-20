@@ -3,20 +3,20 @@ import json
 
 def make_image(images):
     if len(images) == 1:
-        return json.loads('''{
+        return {
             "type": "image",
-            "url": images[0],
+            "url": str(images[0]),
             "size": "5xl",
             "aspectMode": "cover",
             "aspectRatio": "300:196",
             "gravity": "center",
             "flex": 1
-        }''')
+        }
     elif len(images) == 2:
-        return json.loads('''{
+        return [{
             {
                 "type": "image",
-                "url": images[0],
+                "url": str(images[0]),
                 "size": "5xl",
                 "aspectMode": "cover",
                 "aspectRatio": "150:196",
@@ -29,7 +29,7 @@ def make_image(images):
                 "contents": [
                     {
                         "type": "image",
-                        "url": images[1],
+                        "url": str(images[1]),
                         "size": "full",
                         "aspectMode": "cover",
                         "aspectRatio": "150:196",
@@ -38,12 +38,12 @@ def make_image(images):
                 ],
                 "flex": 1
             }
-        }''')
+        }]
     elif len(images) >= 3:
-        return json.loads('''{
+        return [{
             {
                 "type": "image",
-                "url": images[0],
+                "url": str(images[0]),
                 "size": "5xl",
                 "aspectMode": "cover",
                 "aspectRatio": "150:196",
@@ -56,7 +56,7 @@ def make_image(images):
                 "contents": [
                     {
                         "type": "image",
-                        "url": images[1],
+                        "url": str(images[1]),
                         "size": "full",
                         "aspectMode": "cover",
                         "aspectRatio": "150:98",
@@ -64,7 +64,7 @@ def make_image(images):
                     },
                     {
                         "type": "image",
-                        "url": images[2],
+                        "url": str(images[2]),
                         "size": "full",
                         "aspectMode": "cover",
                         "aspectRatio": "150:98",
@@ -73,7 +73,7 @@ def make_image(images):
                 ],
                 "flex": 1
             }
-        }''')
+        }]
 
 
 def message_contents(msg):
@@ -89,9 +89,7 @@ def message_contents(msg):
                 {
                     "type": "box",
                     "layout": "horizontal",
-                    "contents": [
-                        make_image(msg['image'])
-                    ]
+                    "contents": make_image(msg['image'])
                 },
                 {
                     "type": "box",
