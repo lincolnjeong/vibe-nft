@@ -74,6 +74,9 @@ def make_image(images):
 
 
 def message_contents(msg):
+    print('msg----------')
+    print(msg)
+    print('-------------')
     template = {
         "type": "bubble",
         "body": {
@@ -209,5 +212,7 @@ def message_contents(msg):
             ]
         }
     }
-
+    print('---------------')
+    print(template)
+    print('---------------')
     return template
