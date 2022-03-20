@@ -259,7 +259,7 @@ template = """
 
 
 def get_template():
-    return json.dumps(json.loads(template))
+    return json.loads(template)
 
 
 def message_contents(msg):
