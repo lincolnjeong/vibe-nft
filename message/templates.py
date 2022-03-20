@@ -268,6 +268,7 @@ def message_contents(msg):
     print('-------------')
     images = msg['image']
     template = get_template()
+    template['body']['contents'][0]['contents'] = make_image(images)
     print('---------------')
     print(template)
     print('---------------')
