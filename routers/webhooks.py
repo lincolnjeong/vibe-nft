@@ -13,6 +13,7 @@ from utils import get_track_meta, message_analyzer, make_msg, load_config, Block
 
 line_bot_api = LineBotApi(os.environ['CHANNEL_ACCESS_TOKEN'])
 handler = WebhookHandler(os.environ['CHANNEL_SECRET'])
+bcu = BlockChainUtils(load_config())
 
 router = APIRouter(
     prefix="/webhooks",
@@ -20,7 +21,6 @@ router = APIRouter(
     responses={404: {"description": "Not found"}},
 )
 
-bcu = BlockChainUtils(load_config())
 
 
 class Line(BaseModel):
@@ -57,6 +57,7 @@ def message_text(event):
     user_info = get_user_info(event.source.user_id)
     status, msg = message_analyzer(event.message.text)
     msg['user_info'] = user_info
+    print(msg)
 
     if status == 400:
         line_bot_api.reply_message(
@@ -65,6 +66,7 @@ def message_text(event):
         )
     elif status == 200:
         nft_result = mint_nft(user_info['user_id'], str(msg), str(msg))
+        print(nft_result)
         if (nft_result.status_code >= 200) & (nft_result.status_code <= 300):
             line_bot_api.reply_message(
                 event.reply_token,

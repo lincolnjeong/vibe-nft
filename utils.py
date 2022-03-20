@@ -56,13 +56,9 @@ def make_msg(track_info, user_info, tx_id):
 
 
 def load_config():
-    config = {}
-    config['service_api_key'] = os.environ['SERVICE_API_KEY']
-    config['service_api_secret'] = os.environ['SERVICE_API_SECRET']
-    config['wallet_addr'] = os.environ['WALLET_ADDR']
-    config['wallet_secret'] = os.environ['WALLET_SECRET']
-    config['contract_id'] = os.environ['CONTRACT_ID']
-    config['endpoint'] = os.environ['ENDPOINT']
+    config = {'service_api_key': os.environ['SERVICE_API_KEY'], 'service_api_secret': os.environ['SERVICE_API_SECRET'],
+              'wallet_addr': os.environ['WALLET_ADDR'], 'wallet_secret': os.environ['WALLET_SECRET'],
+              'contract_id': os.environ['CONTRACT_ID'], 'endpoint': os.environ['ENDPOINT']}
     return config
 
 
