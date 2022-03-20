@@ -3,17 +3,17 @@ import json
 
 def make_image(images):
     if len(images) == 1:
-        return {
+        return [{
             "type": "image",
             "url": images[0],
-            "size": "5xl",
+            "size": "full",
             "aspectMode": "cover",
             "aspectRatio": "300:196",
             "gravity": "center",
             "flex": 1
-        }
+        }]
     elif len(images) == 2:
-        return [{
+        return [
             {
                 "type": "image",
                 "url": images[0],
@@ -38,9 +38,9 @@ def make_image(images):
                 ],
                 "flex": 1
             }
-        }]
+        ]
     elif len(images) >= 3:
-        return [{
+        return [
             {
                 "type": "image",
                 "url": str(images[0]),
@@ -73,7 +73,7 @@ def make_image(images):
                 ],
                 "flex": 1
             }
-        }]
+        ]
 
 
 template = """
@@ -269,6 +269,8 @@ def message_contents(msg):
     images = msg['image']
     template = get_template()
     template['body']['contents'][0]['contents'] = make_image(images)
+    template['body']['contents'][1]['contents'][0]['contents'][0]['contents'][2]['text'] = msg['track_info']
+    template['body']['contents'][1]['contents'][0]['contents'][1]['contents'][1]['contents'][0]['contents'][2]['text'] = msg['user_info']
     print('---------------')
     print(template)
     print('---------------')
