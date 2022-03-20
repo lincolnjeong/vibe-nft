@@ -5,7 +5,7 @@ from fastapi import APIRouter, HTTPException, Header, Request
 from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
 from linebot.models import TextMessage, MessageEvent, TextSendMessage, StickerMessage, \
-    StickerSendMessage
+  StickerSendMessage, FlexSendMessage
 from pydantic import BaseModel
 
 line_bot_api = LineBotApi(os.environ['CHANNEL_ACCESS_TOKEN'])
@@ -209,7 +209,8 @@ template = {
 }
 
 flex_message = FlexSendMessage(
-  template
+  alt_text='hello',
+  contents=template
 )
 
 @handler.add(MessageEvent, message=TextMessage)
