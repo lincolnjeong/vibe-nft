@@ -94,7 +94,7 @@ def message_contents(msg):
                         "layout": "horizontal",
                         "contents": {
                             "type": "image",
-                            "url": str(images[0]),
+                            "url": "{}".format(images[0]),
                             "size": "5xl",
                             "aspectMode": "cover",
                             "aspectRatio": "300:196",
