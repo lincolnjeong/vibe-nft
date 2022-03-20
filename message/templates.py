@@ -163,34 +163,7 @@ template = """
                       }
                     ],
                     "size": "sm",
-                    "wrap": true
-                  },
-                  {
-                    "type": "box",
-                    "layout": "baseline",
-                    "contents": [
-                      {
-                        "type": "text",
-                        "size": "sm",
-                        "color": "#bcbcbc",
-                        "contents": [
-                          {
-                            "type": "span",
-                            "text": "Maker ID",
-                            "weight": "bold"
-                          },
-                          {
-                            "type": "span",
-                            "text": " | "
-                          },
-                          {
-                            "type": "span",
-                            "text": "Maker ID"
-                          }
-                        ]
-                      }
-                    ],
-                    "spacing": "sm",
+                    "wrap": true,
                     "margin": "md"
                   },
                   {
@@ -220,6 +193,34 @@ template = """
                     ],
                     "spacing": "sm",
                     "margin": "md"
+                  },
+                  {
+                    "type": "box",
+                    "layout": "baseline",
+                    "contents": [
+                      {
+                        "type": "text",
+                        "size": "sm",
+                        "color": "#bcbcbc",
+                        "contents": [
+                          {
+                            "type": "span",
+                            "text": "Maker ID",
+                            "weight": "bold"
+                          },
+                          {
+                            "type": "span",
+                            "text": " | "
+                          },
+                          {
+                            "type": "span",
+                            "text": "Maker ID"
+                          }
+                        ]
+                      }
+                    ],
+                    "spacing": "none",
+                    "margin": "none"
                   },
                   {
                     "type": "box",
@@ -298,8 +299,8 @@ def message_contents(msg):
     template = get_template()
     template['body']['contents'][0]['contents'] = make_image(images)
     template['body']['contents'][1]['contents'][0]['contents'][0]['contents'][2]['text'] = msg['track_info']
-    template['body']['contents'][1]['contents'][0]['contents'][1]['contents'][1]['contents'][0]['contents'][2]['text'] = msg['user_id']
-    template['body']['contents'][1]['contents'][0]['contents'][1]['contents'][2]['contents'][0]['contents'][2]['text'] = msg['user_name']
+    template['body']['contents'][1]['contents'][0]['contents'][1]['contents'][1]['contents'][0]['contents'][2]['text'] = msg['user_name']
+    template['body']['contents'][1]['contents'][0]['contents'][1]['contents'][2]['contents'][0]['contents'][2]['text'] = msg['user_id']
     template['body']['contents'][1]['contents'][0]['contents'][1]['contents'][3]['contents'][0]['contents'][2]['text'] = msg['tx_id']
     print('---------------')
     print(template)
