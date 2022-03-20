@@ -64,7 +64,7 @@ def message_text(event):
         )
     elif status == 200:
         msg = make_msg(msg, user_info)
-        nft_result = mint_nft(user_info['user_id'], str(msg), str(msg))
+        nft_result = mint_nft(user_info['user_id'], user_info['display_name'][:20], str(msg))
         print(nft_result, nft_result.json())
         if (nft_result.status_code >= 200) & (nft_result.status_code <= 300):
             msg['tx_id'] = nft_result.json()['responseData']['txHash']
