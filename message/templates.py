@@ -76,7 +76,7 @@ def make_image(images):
         ]
 
 
-template = """
+default_template = """
 {
   "type": "bubble",
   "body": {
@@ -288,13 +288,10 @@ template = """
 
 
 def get_template():
-    return json.loads(template)
+    return json.loads(default_template)
 
 
 def message_contents(msg):
-    print('msg----------')
-    print(msg)
-    print('-------------')
     images = msg['image']
     template = get_template()
     template['body']['contents'][0]['contents'] = make_image(images)
@@ -304,7 +301,4 @@ def message_contents(msg):
     template['body']['contents'][1]['contents'][0]['contents'][1]['contents'][3]['contents'][0]['contents'][2]['text'] = msg['tx_id']
     template['footer']['contents'][0]['action']['uri'] += msg['tx_id']
     template['footer']['contents'][1]['action']['uri'] += msg['track_ids']
-    print('---------------')
-    print(template)
-    print('---------------')
     return template

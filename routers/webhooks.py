@@ -9,7 +9,7 @@ from linebot.models import TextMessage, MessageEvent, TextSendMessage, StickerMe
 from pydantic import BaseModel
 
 from message.templates import message_contents
-from utils import get_track_meta, message_analyzer, make_msg
+from utils import get_track_meta, message_analyzer, make_msg, load_config, BlockChainUtils
 
 line_bot_api = LineBotApi(os.environ['CHANNEL_ACCESS_TOKEN'])
 handler = WebhookHandler(os.environ['CHANNEL_SECRET'])
@@ -19,6 +19,8 @@ router = APIRouter(
     tags=["chatbot"],
     responses={404: {"description": "Not found"}},
 )
+
+bcu = BlockChainUtils(load_config())
 
 
 class Line(BaseModel):
@@ -36,6 +38,10 @@ def get_user_info(user_id):
     return user_info
 
 
+def mint_nft(user_id, name, meta):
+    return bcu.mint_nft(user_id, name, meta)
+
+
 @router.post("/line/vibe")
 async def callback(request: Request, x_line_signature: str = Header(None)):
     body = await request.body()
@@ -48,12 +54,9 @@ async def callback(request: Request, x_line_signature: str = Header(None)):
 
 @handler.add(MessageEvent, message=TextMessage)
 def message_text(event):
-    print("!!!!!!!!!!!!!!!!!!!!!!")
-    print(event)
-    print("!!!!!!!!!!!!!!!!!!!!!!")
     user_info = get_user_info(event.source.user_id)
     status, msg = message_analyzer(event.message.text)
-    tx_id = '4D696C7B28918870EB6025F30E6B5A4577417E5613E6FAF230DB3EDA8C83CD5E'
+    msg['user_info'] = user_info
 
     if status == 400:
         line_bot_api.reply_message(
@@ -61,13 +64,20 @@ def message_text(event):
             TextSendMessage(text=f'"{msg}" 에서 곡을 찾지 못했습니다. \n,(comma)를 사용하여 검색어를 입력해 주세요.')
         )
     elif status == 200:
-        line_bot_api.reply_message(
-            event.reply_token,
-            FlexSendMessage(
-                alt_text='nft message',
-                contents=message_contents(make_msg(msg, user_info, tx_id))
+        nft_result = mint_nft(user_info['user_id'], msg, msg)
+        if (nft_result.status_code >= 200) & (nft_result.status_code <= 300):
+            line_bot_api.reply_message(
+                event.reply_token,
+                FlexSendMessage(
+                    alt_text='nft message',
+                    contents=message_contents(make_msg(msg, user_info, nft_result.json()['responseData']['txHash']))
+                )
             )
-        )
+        else:
+            line_bot_api.reply_message(
+                event.reply_token,
+                TextSendMessage(text=f'NFT 생성에 실패하였습니다. 관리자에게 문의해 보세요.')
+            )
 
 
 @handler.add(MessageEvent, message=StickerMessage)

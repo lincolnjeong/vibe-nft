@@ -3,6 +3,7 @@ import random
 import string
 import time
 import requests
+import os
 
 from signature_generator import SignatureGenerator
 
@@ -54,7 +55,18 @@ def make_msg(track_info, user_info, tx_id):
             'user_id': user_info['user_id'], 'user_name': user_info['display_name'], 'tx_id': tx_id, 'track_ids': str([int(i['track_id']) for i in track_info])[1:-1].replace(' ', '')}
 
 
-class BlackChainUtils:
+def load_config():
+    config = {}
+    config['service_api_key'] = os.environ['SERVICE_API_KEY']
+    config['service_api_secret'] = os.environ['SERVICE_API_SECRET']
+    config['wallet_addr'] = os.environ['WALLET_ADDR']
+    config['wallet_secret'] = os.environ['WALLET_SECRET']
+    config['contract_id'] = os.environ['CONTRACT_ID']
+    config['endpoint'] = os.environ['ENDPOINT']
+    return config
+
+
+class BlockChainUtils:
     def __init__(self, config):
         sg = SignatureGenerator()
         self.get_signature = sg.generate
@@ -86,3 +98,18 @@ class BlackChainUtils:
     def post_api(self, path, request_body):
         headers = self.get_headers(path, method='POST', body=request_body)
         return requests.post(self.config['endpoint'] + path, headers=headers, json=request_body)
+
+    def mint_nft(self, user_id, name, meta):
+        contract_id = self.config['contract_id']
+        token_type = '10000001'
+        path = f"/v1/item-tokens/{contract_id}/non-fungibles/{token_type}/mint"
+
+        request_body = {
+                'ownerAddress': self.config['wallet_addr'],
+                'ownerSecret': self.config['wallet_secret'],
+                'toUserId': user_id,
+                'name': name,
+                'meta': meta
+            }
+
+        return self.post_api(path, request_body)
