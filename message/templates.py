@@ -278,7 +278,7 @@ template = """
         "action": {
           "type": "uri",
           "label": "음악 듣기",
-          "uri": "https://vibe.naver.com/"
+          "uri": "https://vibe.naver.com/app/listen?trackIds="
         }
       }
     ]
@@ -302,6 +302,8 @@ def message_contents(msg):
     template['body']['contents'][1]['contents'][0]['contents'][1]['contents'][1]['contents'][0]['contents'][2]['text'] = msg['user_name']
     template['body']['contents'][1]['contents'][0]['contents'][1]['contents'][2]['contents'][0]['contents'][2]['text'] = msg['user_id']
     template['body']['contents'][1]['contents'][0]['contents'][1]['contents'][3]['contents'][0]['contents'][2]['text'] = msg['tx_id']
+    template['footer']['contents'][0]['action']['uri'] += msg['tx_id']
+    template['footer']['contents'][1]['action']['uri'] += msg['track_ids']
     print('---------------')
     print(template)
     print('---------------')
