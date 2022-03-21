@@ -67,6 +67,7 @@ class BlockChainUtils:
         sg = SignatureGenerator()
         self.get_signature = sg.generate
         self.config = config
+        self.master_id = os.environ['UID']
 
     def get_headers(self, path, method, body=None):
         nonce = ''.join(
@@ -103,7 +104,7 @@ class BlockChainUtils:
         request_body = {
                 'ownerAddress': self.config['wallet_addr'],
                 'ownerSecret': self.config['wallet_secret'],
-                'toUserId': os.environ['UID'],
+                'toUserId': self.master_id,
                 'name': name,
                 'meta': meta
             }
