@@ -1,4 +1,4 @@
-# Fastapi Example
+# VIBE NFT
 
 ## Prerequisite
 
