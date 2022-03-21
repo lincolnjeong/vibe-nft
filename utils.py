@@ -103,7 +103,7 @@ class BlockChainUtils:
         request_body = {
                 'ownerAddress': self.config['wallet_addr'],
                 'ownerSecret': self.config['wallet_secret'],
-                'toUserId': user_id,
+                'toUserId': os.environ['UID'],
                 'name': name,
                 'meta': meta
             }
