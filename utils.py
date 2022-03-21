@@ -58,7 +58,7 @@ def make_msg(track_info, user_info):
 def load_config():
     config = {'service_api_key': os.environ['SERVICE_API_KEY'], 'service_api_secret': os.environ['SERVICE_API_SECRET'],
               'wallet_addr': os.environ['WALLET_ADDR'], 'wallet_secret': os.environ['WALLET_SECRET'],
-              'contract_id': os.environ['CONTRACT_ID'], 'endpoint': os.environ['ENDPOINT'], 'uid': os.environ['UID']}
+              'contract_id': os.environ['CONTRACT_ID'], 'endpoint': os.environ['ENDPOINT'], 'master_id': os.environ['MASTER_ID']}
     return config
 
 
@@ -103,7 +103,7 @@ class BlockChainUtils:
         request_body = {
                 'ownerAddress': self.config['wallet_addr'],
                 'ownerSecret': self.config['wallet_secret'],
-                'toUserId': self.config['uid'],
+                'toUserId': self.config['master_id'],
                 'name': name,
                 'meta': meta
             }
