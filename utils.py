@@ -7,6 +7,9 @@ import os
 
 from signature_generator import SignatureGenerator
 
+music_api = os.environ['MUSIC_API']
+trigger = os.environ['TRIGGER'] + ' '
+
 
 def write_json(file_path, data):
     with open(file_path, 'w', encoding='utf-8') as file:
@@ -21,7 +24,7 @@ def read_json(file_path):
 
 
 def get_track_meta(query):
-    url = f'https://apis.naver.com/vibeWeb/musicapiweb/v3/search/track.json?query={query}&start=1&display=100&sort=RELEVANCE'
+    url = f'{music_api}?query={query}&start=1&display=100&sort=RELEVANCE'
     meta = requests.get(url).json()['response']['result']['tracks'][0]
     track_id = meta['trackId']
     track_title = meta['trackTitle']
@@ -33,9 +36,9 @@ def get_track_meta(query):
 
 
 def message_analyzer(original):
-    if original[:6] != '/mint ':
+    if original[:6] != trigger:
         return 0, original
-    text = original.replace('/mint ', '')
+    text = original.replace(trigger, '')
     text = text.split(',')
     result = []
     for query in text:
@@ -52,13 +55,15 @@ def message_analyzer(original):
 def make_msg(track_info, user_info):
     return {'image': [i['album_image'] for i in track_info],
             'track_info': ", ".join([" - ".join([i['track_title'], i['artist_name']]) for i in track_info]),
-            'user_id': user_info['user_id'], 'user_name': user_info['display_name'], 'track_ids': str([int(i['track_id']) for i in track_info])[1:-1].replace(' ', '')}
+            'user_id': user_info['user_id'], 'user_name': user_info['display_name'],
+            'track_ids': str([int(i['track_id']) for i in track_info])[1:-1].replace(' ', '')}
 
 
 def load_config():
     config = {'service_api_key': os.environ['SERVICE_API_KEY'], 'service_api_secret': os.environ['SERVICE_API_SECRET'],
               'wallet_addr': os.environ['WALLET_ADDR'], 'wallet_secret': os.environ['WALLET_SECRET'],
-              'contract_id': os.environ['CONTRACT_ID'], 'endpoint': os.environ['ENDPOINT'], 'master_id': os.environ['MASTER_ID']}
+              'contract_id': os.environ['CONTRACT_ID'], 'endpoint': os.environ['ENDPOINT'],
+              'master_id': os.environ['MASTER_ID']}
     return config
 
 
@@ -97,8 +102,7 @@ class BlockChainUtils:
 
     def mint_nft(self, user_id, name, meta):
         contract_id = self.config['contract_id']
-        token_type = '10000001'
-        path = f"/v1/item-tokens/{contract_id}/non-fungibles/{token_type}/mint"
+        path = f"/v1/item-tokens/{contract_id}/non-fungibles/10000001/mint"
 
         request_body = {
                 'ownerAddress': self.config['wallet_addr'],
